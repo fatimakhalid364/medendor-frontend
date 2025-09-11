@@ -5,11 +5,7 @@ export const signupThunk = createAsyncThunk('auth/signup', async (data, thunkAPI
     try {
         console.log("inside signupthunk");
 
-        const res = await api.post('/auth/signup', data, {
-            params: {
-                role: 'patient', 
-            },
-        });
+        const res = await api.post('/auth/signup', data);
 
         console.log("data in signupthunk is", res.data);
         return res.data;

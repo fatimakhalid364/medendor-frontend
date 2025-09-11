@@ -12,6 +12,7 @@ export const Signup = () => {
         name: '',
         email: '',
         password: '',
+        role: ''
     });
 
     const handleChange = (e) => {
@@ -58,6 +59,14 @@ export const Signup = () => {
             placeholder="Password"
             type="password"
             value={form.password}
+            onChange={handleChange}
+            required
+            />
+
+            <input
+            name="role"
+            placeholder="Role"
+            value={form.role}
             onChange={handleChange}
             required
             />
