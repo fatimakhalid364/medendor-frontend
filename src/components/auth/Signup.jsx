@@ -36,44 +36,44 @@ export const Signup = () => {
 
     return (
         <div>
-        <h2>Signup</h2>
-        <form onSubmit={handleSubmit}>
-            <input
-            name="name"
-            placeholder="Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            />
+            <h2>Signup</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                name="name"
+                placeholder="Name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                />
 
-            <input
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            />
+                <input
+                name="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                />
 
-            <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            />
+                <input
+                name="password"
+                placeholder="Password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                />
 
-            <input
-            name="role"
-            placeholder="Role"
-            value={form.role}
-            onChange={handleChange}
-            required
-            />
-            <button type="submit" disabled={loading}>
-                {loading ? 'Signing up...' : 'Sign up'}
-            </button>
-        </form>
+                <input
+                name="role"
+                placeholder="Role"
+                value={form.role}
+                onChange={handleChange}
+                required
+                />
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Signing up...' : 'Sign up'}
+                </button>
+            </form>
         </div>
     );
 };

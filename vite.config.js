@@ -9,10 +9,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), 
     },
   },
-  server: {
-    host: true, // allow external access
-    origin: 'https://a5edd1d013d7.ngrok-free.app',
-  },
+  // server: {
+  //   host: true,
+  //   origin: 'https://a5edd1d013d7.ngrok-free.app',
+  // },
   preview: {
     allowedHosts: ['https://a5edd1d013d7.ngrok-free.app']
   }

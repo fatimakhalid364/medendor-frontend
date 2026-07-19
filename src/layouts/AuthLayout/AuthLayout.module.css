@@ -1,0 +1,27 @@
+.backdrop {
+    background: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.imgContainer {
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+.formContainer {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
