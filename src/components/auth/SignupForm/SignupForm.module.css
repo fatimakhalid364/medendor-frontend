@@ -1,0 +1,11 @@
+.fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 70%;
+    margin-top: 25px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}

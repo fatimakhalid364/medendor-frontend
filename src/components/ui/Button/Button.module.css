@@ -33,33 +33,32 @@
 /* Variants */
 
 .primary {
-  background-color: #7F265B;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .primary:hover {
-  background-color: #661F49;
+  background-color: var(--color-primary-hover);
 }
 
 
 .secondary {
-  background-color: #f1f5f9;
-  color: #661F49;
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
 }
 
 .secondary:hover {
-  background-color: #e2e8f0;
+  background-color: var(--color-primary);
 }
 
 
 .outline {
   background-color: transparent;
-  border: 1px solid #7F265B;
-  color: #7F265B;
+  border: 1px solid var(--color-primary);
 }
 
 .outline:hover {
-  background-color: #7F265B;
+  background-color: var(--color-primary);
   color: white;
 }
 

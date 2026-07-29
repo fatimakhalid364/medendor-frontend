@@ -1,5 +1,5 @@
 import styles from "./AuthLayout.module.css";
-import authImage from "/images/auth-image.png";
+import authImage from "/images/auth-img.png";
 
 export const AuthLayout = ({
   children

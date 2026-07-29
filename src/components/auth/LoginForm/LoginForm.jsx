@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
 import styles from "./LoginForm.module.css";
-import { validateForm } from '@/utils/formValidation';
+import { validateLoginForm } from '@/utils/formValidators';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -30,7 +30,7 @@ export const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = validateForm(form);
+        const newErrors = validateLoginForm(form);
 
         if (Object.keys(newErrors).length > 0) {
             setValidationErrors(newErrors);
