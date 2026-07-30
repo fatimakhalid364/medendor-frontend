@@ -1,54 +1,189 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { loginThunk, signupThunk, logoutThunk } from '@/store/thunks/authThunks';
+import { createSlice } from "@reduxjs/toolkit";
+
+import {
+    loginThunk,
+    signupThunk,
+    verifyCodeThunk,
+    logoutThunk,
+} from "@/store/thunks/authThunks";
+
+import {
+    setRequestPending,
+    setRequestSucceeded,
+    setRequestFailed,
+    clearRequestError,
+    createRequestState
+} from "@/store/utils/requestStateHelpers";
+
 
 const initialState = {
+
     user: null,
+
     isAuthenticated: false,
-    loading: false,
-    error: null,
+
+    requestStatus: {
+
+        login: createRequestState(),
+
+        signup: createRequestState(),
+
+        verifyCode: createRequestState(),
+
+    },
+
 };
 
-    const authSlice = createSlice({
-    name: 'auth',
+
+const authSlice = createSlice({
+
+    name: "auth",
+
     initialState,
+
+
     reducers: {
+
         resetAuthState: () => initialState,
+
+
+        clearLoginError: (state) => {
+            clearRequestError(
+                state.requestStatus.login
+            );
+        },
+
+
+        clearSignupError: (state) => {
+            clearRequestError(
+                state.requestStatus.signup
+            );
+        },
+
+
+        clearVerifyCodeError: (state) => {
+            clearRequestError(
+                state.requestStatus.verifyCode
+            );
+        },
+
     },
+
+
     extraReducers: (builder) => {
+
         builder
-        
+
+        // LOGIN
+
         .addCase(loginThunk.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+
+            setRequestPending(
+                state.requestStatus.login
+            );
+
         })
+
+
         .addCase(loginThunk.fulfilled, (state, action) => {
-            state.loading = false;
+
             state.user = action.payload;
+
             state.isAuthenticated = true;
+
+
+            setRequestSucceeded(
+                state.requestStatus.login
+            );
+
         })
+
+
         .addCase(loginThunk.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+
+            setRequestFailed(
+                state.requestStatus.login,
+                action.payload
+            );
+
         })
+
+
+        // SIGNUP
 
         .addCase(signupThunk.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-        .addCase(signupThunk.fulfilled, (state) => {
-            state.loading = false;
-        })
-        .addCase(signupThunk.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+
+            setRequestPending(
+                state.requestStatus.signup
+            );
+
         })
 
-        .addCase(logoutThunk.fulfilled, (state) => {
-            Object.assign(state, initialState); 
-        });
+
+        .addCase(signupThunk.fulfilled, (state) => {
+
+            setRequestSucceeded(
+                state.requestStatus.signup
+            );
+
+        })
+
+
+        .addCase(signupThunk.rejected, (state, action) => {
+
+            setRequestFailed(
+                state.requestStatus.signup,
+                action.payload
+            );
+
+        })
+
+
+        // VERIFY CODE
+
+        .addCase(verifyCodeThunk.pending, (state) => {
+
+            setRequestPending(
+                state.requestStatus.verifyCode
+            );
+
+        })
+
+
+        .addCase(verifyCodeThunk.fulfilled, (state) => {
+
+            setRequestSucceeded(
+                state.requestStatus.verifyCode
+            );
+
+        })
+
+
+        .addCase(verifyCodeThunk.rejected, (state, action) => {
+
+            setRequestFailed(
+                state.requestStatus.verifyCode,
+                action.payload
+            );
+
+        })
+
+
+        // LOGOUT
+
+        .addCase(logoutThunk.fulfilled, () => initialState);
+
     },
+
 });
 
-export const { resetAuthState } = authSlice.actions;
+
+export const {
+    resetAuthState,
+    clearLoginError,
+    clearSignupError,
+    clearVerifyCodeError,
+} = authSlice.actions;
+
 
 export default authSlice.reducer;

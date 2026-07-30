@@ -8,11 +8,16 @@ import {Dropdown} from '@/components/ui/Dropdown';
 import {roles} from '@/constants/roles';
 import styles from "./SignupForm.module.css";
 import { validateSignupForm } from '@/utils/formValidators';
+import { clearSignupError } from "@/store/slices/authSlice";
 
 export const SignupForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error } = useSelector((state) => state.auth);
+    const { status, error } = useSelector(
+        (state) => state.auth.requestStatus.signup
+    );
+
+    const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
 
     const [form, setForm] = useState({
@@ -30,6 +35,9 @@ export const SignupForm = () => {
             ...prev,
             [name]: value,
         }));
+        if (e) {
+        dispatch(clearSignupError());
+    }
     };
 
 
