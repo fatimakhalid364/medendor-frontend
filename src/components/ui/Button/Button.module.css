@@ -35,10 +35,18 @@
 .primary {
   background-color: var(--color-primary);
   color: white;
+  box-shadow: var(--shadow-sm);
 }
 
-.primary:hover {
+.primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 

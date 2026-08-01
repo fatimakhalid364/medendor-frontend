@@ -9,6 +9,8 @@ export const Input = ({
   name,
   error,
   icon,
+  rightIcon,
+  onRightIconClick,
   ...props
 }) => {
   return (
@@ -29,9 +31,20 @@ export const Input = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`${styles.input} ${error ? styles.error : ""}`}
+          className={`${styles.input} ${icon ? styles.hasIcon : ""} ${rightIcon ? styles.hasRightIcon : ""} ${error ? styles.error : ""}`}
           {...props}
         />
+
+        {rightIcon && (
+          <button
+            type="button"
+            className={styles.rightIcon}
+            onClick={onRightIconClick}
+            tabIndex={onRightIconClick ? 0 : -1}
+          >
+            {rightIcon}
+          </button>
+        )}
       </div>
 
       {error && <p className={styles.errorText}>{error}</p>}
