@@ -9,6 +9,7 @@ import {roles} from '@/constants/roles';
 import styles from "./SignupForm.module.css";
 import { validateSignupForm } from '@/utils/formValidators';
 import { clearSignupError } from "@/store/slices/authSlice";
+import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 
 export const SignupForm = () => {
     const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export const SignupForm = () => {
 
     const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
 
     const [form, setForm] = useState({
         firstName: '',
@@ -61,7 +63,16 @@ export const SignupForm = () => {
 
     return (
         <>
-                <h2>Signup</h2>
+                <div className={styles.header}>
+                    <h2>Sign Up</h2>
+                    <p className={styles.subtitle}>Sign up to become a part of Meden</p>
+                </div>
+
+                {error && (
+                    <div className={styles.alert} role="alert">
+                        {error}
+                    </div>
+                )}
 
                 <form className={styles.fields} onSubmit={handleSubmit}>
                     <Input
@@ -87,10 +98,12 @@ export const SignupForm = () => {
                             label="Email"
                             name="email"
                             type="email"
-                            placeholder="Email"
+                            placeholder="you@example.com"
                             value={form.email}
                             onChange={handleChange}
                             error={validationErrors.email}
+                            icon={<MailIcon />}
+                            autoComplete="email"
                         />
                     </div>
                    
@@ -98,20 +111,28 @@ export const SignupForm = () => {
                     <Input
                         label="Password"
                         name="password"
-                        type="password"
-                        placeholder="Password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
                         value={form.password}
                         onChange={handleChange}
                         error={validationErrors.password}
+                        icon={<LockIcon />}
+                        rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        onRightIconClick={() => setShowPassword((prev) => !prev)}
+                        autoComplete="current-password"
                     />
                     <Input
                         label="Confirm Password"
                         name="confirmPassword"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="Confirm Password"
                         value={form.confirmPassword}
                         onChange={handleChange}
                         error={validationErrors.confirmPassword}
+                        icon={<LockIcon />}
+                        rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        onRightIconClick={() => setShowPassword((prev) => !prev)}
+                        autoComplete="current-password"
                     />
                     <div className={styles.fullWidth}>
                         <Dropdown

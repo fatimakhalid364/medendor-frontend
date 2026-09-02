@@ -5,11 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 export const VerifyCode = () => {
     const [code, setCode] = useState('');
-    const [error, setError] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { loading } = useSelector((state) => state.auth); 
+    const { status, error } = useSelector(
+        (state) => state.auth.requestStatus.signup
+    );
+
+    const loading = status === "pending";
+    const [validationErrors, setValidationErrors] = useState({});
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

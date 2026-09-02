@@ -30,7 +30,7 @@ export const loginThunk = createAsyncThunk('auth/login', async (credentials, thu
         console.log("inside loginthunk")
         const res = await api.post('/auth/login', credentials);
         console.log("res inside loginThunk is", res.data)
-        return res.data.user;
+        return res.data;
     } catch (err) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || 'Login failed');
     }

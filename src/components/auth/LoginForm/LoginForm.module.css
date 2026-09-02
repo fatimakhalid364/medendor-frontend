@@ -5,12 +5,14 @@
 .header h2 {
     font-size: var(--font-size-2xl);
     color: var(--color-text-primary);
+    text-align: center;
 }
 
 .subtitle {
     margin-top: var(--spacing-xs);
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+    text-align: center;
 }
 
 .fields {
