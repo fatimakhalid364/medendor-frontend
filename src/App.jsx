@@ -3,7 +3,7 @@ import {ProtectedRoute} from '@/components/auth/ProtectedRoute';
 import {PublicRoute} from '@/components/auth/PublicRoute';
 import {LoginPage} from '@/pages/auth/LoginPage';
 import {SignupPage} from '@/pages/auth/SignupPage';
-import { VerifyCode } from '@/components/auth/VerifyCode';
+import { VerifyCodePage } from '@/pages/auth/VerifyCodePage';
 import {Dashboard} from '@/components/dashboard/placeholder';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <Route element={<PublicRoute />}>
           <Route path="/authentication/login" element={<LoginPage />} />
           <Route path="/authentication/signup" element={<SignupPage />} />
-          <Route path="/authentication/verify-code" element={<VerifyCode />} />
+          <Route path="/authentication/verify-code" element={<VerifyCodePage />} />
         </Route>
 
         {/* Protected Routes */}

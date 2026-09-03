@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyCodeThunk } from '@/store/thunks/authThunks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import {validateVerifyCodeForm} from '@/utils/formValidators';
+import styles from "./VerifyCodeForm.module.css";
+import {Input} from '@/components/ui/Input';
+import {Button} from '@/components/ui/Button';
+import {OTPInput} from '@/components/ui/OTPInput'
 
-export const VerifyCode = () => {
+export const VerifyCodeForm = () => {
     const [code, setCode] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { status, error } = useSelector(
-        (state) => state.auth.requestStatus.signup
+        (state) => state.auth.requestStatus.verifyCode
     );
 
     const loading = status === "pending";
@@ -20,10 +25,15 @@ export const VerifyCode = () => {
         e.preventDefault();
 
         const email = localStorage.getItem('signupEmail');
-        if (!email) {
-            setError('No email found. Please sign up again.');
+
+
+        const newErrors = validateVerifyCodeForm(code);
+
+        if (Object.keys(newErrors).length > 0) {
+            setValidationErrors(newErrors);
             return;
         }
+        setValidationErrors({});
 
         const res = await dispatch(verifyCodeThunk({ email, code }));
         console.log("response inside handleSubmit of VerifyCode comp is", res);
@@ -31,27 +41,32 @@ export const VerifyCode = () => {
         if (res.meta.requestStatus === 'fulfilled') {
             localStorage.removeItem('signupEmail');
             navigate('/authentication/login'); // or wherever you want
-        } else {
-            setError(res.payload || 'Code verification failed');
         }
     };
 
     return (
-        <div>
-            <h2>Verify Code</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Enter verification code"
+        <>
+            <div className={styles.header}>
+                    <h2>Verify Code</h2>
+                    <p className={styles.subtitle}>Enter the code to verify your email</p>
+                </div>
+
+            {error && (
+                <div className={styles.alert} role="alert">
+                    {error}
+                </div>
+            )}
+            <form className={styles.fields} onSubmit={handleSubmit}>
+                <OTPInput
                     value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    required
+                    onChange={setCode}
                 />
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Verifying...' : 'Verify'}
-                </button>
+                <Button type='submit' loading={loading} disabled={loading}>Verify Code</Button>
+
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
+            <p className={styles.footer}>
+                Didn't receive email? <Link to="/placeholder">Resend Verification Code</Link>
+            </p>
+        </>
     );
 };

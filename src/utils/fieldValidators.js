@@ -26,11 +26,11 @@ export const validatePasswordStrength = (password, errors) => {
   }
 };
 
-export const validateCode = (code, errors) => {
-  if (!code?.trim()){
-    errors.code = "Code is required."
-  }
-  if (code.length !== 6){
-    errors.code = "Code must be of 6 digits"
-  }
-}
+// export const validateCode = (code, errors) => {
+//   if (!code?.trim()){
+//     errors.code = "Code is required."
+//   }
+//   if (code.length !== 6){
+//     errors.code = "Code must be of 6 digits"
+//   }
+// }

@@ -52,3 +52,18 @@ export const validateSignupForm = (form) => {
 
   return errors;
 };
+
+export const validateVerifyCodeForm = (code) => {
+  const errors = {};
+
+
+  if (!code?.trim()){
+    errors.code = "Code is required."
+  }
+
+  if (code.length !== 6){
+    errors.code = "Code must be of 6 digits."
+  }
+
+  return errors;
+}

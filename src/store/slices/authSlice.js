@@ -103,7 +103,7 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.login,
-                action.payload
+                action.payload.message
             );
 
         })
@@ -133,7 +133,7 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.signup,
-                action.payload
+                action.payload.message
             );
 
         })
@@ -163,7 +163,7 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.verifyCode,
-                action.payload
+                action.payload.message
             );
 
         })

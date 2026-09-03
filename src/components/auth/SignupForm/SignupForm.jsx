@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupThunk } from '@/store/thunks/authThunks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
 import {Dropdown} from '@/components/ui/Dropdown';
@@ -52,7 +52,7 @@ export const SignupForm = () => {
             return;
         }
         setValidationErrors({});
-        localStorage.setItem('signupEmail', form.email);
+        localStorage.setItem('signupEmail', form.email.trim());
         const { confirmPassword, ...signupData } = form;
         const res = await dispatch(signupThunk(signupData));
         console.log("response inside handleSubmit of Signup comp is", res);
@@ -116,7 +116,6 @@ export const SignupForm = () => {
                         value={form.password}
                         onChange={handleChange}
                         error={validationErrors.password}
-                        icon={<LockIcon />}
                         rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
                         onRightIconClick={() => setShowPassword((prev) => !prev)}
                         autoComplete="current-password"
@@ -129,7 +128,6 @@ export const SignupForm = () => {
                         value={form.confirmPassword}
                         onChange={handleChange}
                         error={validationErrors.confirmPassword}
-                        icon={<LockIcon />}
                         rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
                         onRightIconClick={() => setShowPassword((prev) => !prev)}
                         autoComplete="current-password"
@@ -146,9 +144,10 @@ export const SignupForm = () => {
                         />
                     </div>
                     <Button className={styles.fullWidth} type='submit' loading={loading} disabled={loading}>Signup</Button>
-
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
                 </form>
+                <p className={styles.footer}>
+                    Already have an account? <Link to="/authentication/login">Login</Link>
+                </p>
             </>
     );
 };
