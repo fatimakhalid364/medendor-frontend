@@ -5,6 +5,7 @@ import {
     signupThunk,
     verifyCodeThunk,
     logoutThunk,
+    forgotPasswordThunk
 } from "@/store/thunks/authThunks";
 
 import {
@@ -29,6 +30,8 @@ const initialState = {
         signup: createRequestState(),
 
         verifyCode: createRequestState(),
+
+        forgotPassword: createRequestState(),
 
     },
 
@@ -64,6 +67,12 @@ const authSlice = createSlice({
         clearVerifyCodeError: (state) => {
             clearRequestError(
                 state.requestStatus.verifyCode
+            );
+        },
+
+        clearForgotPasswordError: (state) => {
+            clearRequestError(
+                state.requestStatus.forgotPassword
             );
         },
 
@@ -168,6 +177,28 @@ const authSlice = createSlice({
 
         })
 
+        .addCase(forgotPasswordThunk.pending, (state)=> {
+
+            setRequestPending(
+                state.requestStatus.forgotPassword,
+
+            );
+        })
+
+        .addCase(forgotPasswordThunk.fulfilled, (state)=> {
+
+            setRequestSucceeded(state.requestStatus.forgotPassword);
+
+        })
+
+        .addCase(forgotPasswordThunk.rejected, (state, action)=> {
+
+            setRequestFailed(
+                state.requestStatus.forgotPassword,
+                action.payload.message
+            )
+        })
+
 
         // LOGOUT
 
@@ -183,6 +214,7 @@ export const {
     clearLoginError,
     clearSignupError,
     clearVerifyCodeError,
+    clearForgotPasswordError
 } = authSlice.actions;
 
 

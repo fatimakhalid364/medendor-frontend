@@ -95,6 +95,9 @@ export const LoginForm = () => {
                         onRightIconClick={() => setShowPassword((prev) => !prev)}
                         autoComplete="current-password"
                     />
+                    <div className={styles.linkBox}>
+                        <Link className={styles.link} to="/authentication/forgot-password">Forgot Password?</Link>
+                    </div>
 
                     <Button type='submit' loading={loading} disabled={loading} className={styles.submit}>
                         Login

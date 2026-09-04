@@ -4,9 +4,9 @@ import { verifyCodeThunk } from '@/store/thunks/authThunks';
 import { useNavigate, Link } from 'react-router-dom';
 import {validateVerifyCodeForm} from '@/utils/formValidators';
 import styles from "./VerifyCodeForm.module.css";
-import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
-import {OTPInput} from '@/components/ui/OTPInput'
+import {OTPInput} from '@/components/ui/OTPInput';
+import {clearVerifyCodeError} from '@/store/slices/authSlice';
 
 export const VerifyCodeForm = () => {
     const [code, setCode] = useState('');
@@ -19,6 +19,13 @@ export const VerifyCodeForm = () => {
 
     const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
+
+    const handleChange = (value)=> {
+
+        dispatch(clearVerifyCodeError());
+        setCode(value);
+
+    }
 
 
     const handleSubmit = async (e) => {
@@ -48,7 +55,7 @@ export const VerifyCodeForm = () => {
         <>
             <div className={styles.header}>
                     <h2>Verify Code</h2>
-                    <p className={styles.subtitle}>Enter the code to verify your email</p>
+                    <p className={styles.subtitle}>We've sent a 6-digit code to your email. Enter the code to verify your email</p>
                 </div>
 
             {error && (
@@ -59,8 +66,9 @@ export const VerifyCodeForm = () => {
             <form className={styles.fields} onSubmit={handleSubmit}>
                 <OTPInput
                     value={code}
-                    onChange={setCode}
+                    onChange={handleChange}
                 />
+                {validationErrors.code && <p className={styles.errorText}>{validationErrors.code}</p>}
                 <Button type='submit' loading={loading} disabled={loading}>Verify Code</Button>
 
             </form>

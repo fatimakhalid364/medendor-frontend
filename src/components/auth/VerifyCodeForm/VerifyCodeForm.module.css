@@ -50,3 +50,10 @@
 .footer a:hover {
     text-decoration: underline;
 }
+
+.errorText {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-error, #dc2626);
+}
+

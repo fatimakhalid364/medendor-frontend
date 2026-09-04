@@ -67,3 +67,12 @@ export const validateVerifyCodeForm = (code) => {
 
   return errors;
 }
+
+export const validateForgotPasswordForm = (email)=> {
+
+  const errors = {};
+
+  validateEmail(email, errors);
+
+  return errors;
+}

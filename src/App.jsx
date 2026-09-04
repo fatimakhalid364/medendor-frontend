@@ -4,6 +4,7 @@ import {PublicRoute} from '@/components/auth/PublicRoute';
 import {LoginPage} from '@/pages/auth/LoginPage';
 import {SignupPage} from '@/pages/auth/SignupPage';
 import { VerifyCodePage } from '@/pages/auth/VerifyCodePage';
+import {ForgotPasswordPage} from '@/pages/auth/ForgotPasswordPage';
 import {Dashboard} from '@/components/dashboard/placeholder';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/authentication/login" element={<LoginPage />} />
           <Route path="/authentication/signup" element={<SignupPage />} />
           <Route path="/authentication/verify-code" element={<VerifyCodePage />} />
+          <Route path="/authentication/forgot-password" element={<ForgotPasswordPage />} />
         </Route>
 
         {/* Protected Routes */}

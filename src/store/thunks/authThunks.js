@@ -36,6 +36,17 @@ export const loginThunk = createAsyncThunk('auth/login', async (credentials, thu
     }
 });
 
+export const forgotPasswordThunk = createAsyncThunk('auth/forgotPassword', async (credentials, thunkAPI) => {
+    try {
+        console.log("inside forgotPasswordthunk")
+        const res = await api.post('/auth/forgot-password', credentials);
+        console.log("res inside loginThunk is", res.data)
+        return res.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || 'Login failed');
+    }
+});
+
 
 export const logoutThunk = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     try {
