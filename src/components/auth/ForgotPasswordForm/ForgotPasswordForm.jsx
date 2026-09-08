@@ -51,7 +51,9 @@ export const ForgotPasswordForm = () => {
             <>
                 <div className={styles.header}>
                     <h2>Password Recovery</h2>
-                    <p className={styles.subtitle}>Enter the email associated to your Meden account</p>
+                    <p className={styles.subtitle}>{
+                        status === 'succeeded' ? '' : `Enter the email associated to your Meden account`}
+                    </p>
                 </div>
 
                 {error && (
@@ -60,23 +62,35 @@ export const ForgotPasswordForm = () => {
                     </div>
                 )}
 
-                <form className={styles.fields} onSubmit={handleSubmit} noValidate>
-                    <Input
-                        label="Email"
-                        name="email"
-                        type="email"
-                        placeholder="you@example.com"
-                        value={email}
-                        onChange={handleChange}
-                        error={validationErrors.email}
-                        icon={<MailIcon />}
-                        autoComplete="email"
-                    />
+                {status === 'idle' ? 
+                    <div className={styles.emailMessage}>
+                        <p >
+                            {`If an account exists for ${email}, 
+                            you will get an email with instructions on resetting 
+                            your password. If it doesn't arrive, 
+                            be sure to check your spam folder.`}
+                        </p>
 
-                    <Button type='submit' loading={loading} disabled={loading} className={styles.submit}>
-                        Continue
-                    </Button>
-                </form>
+                    </div>
+                    :
+                    <form className={styles.fields} onSubmit={handleSubmit} noValidate>
+                        <Input
+                            label="Email"
+                            name="email"
+                            type="email"
+                            placeholder="you@example.com"
+                            value={email}
+                            onChange={handleChange}
+                            error={validationErrors.email}
+                            icon={<MailIcon />}
+                            autoComplete="email"
+                        />
+
+                        <Button type='submit' loading={loading} disabled={loading} className={styles.submit}>
+                            Continue
+                        </Button>
+                    </form>
+                }
 
                 <p className={styles.footer}>
                     <Link to="/authentication/login">Back</Link>
