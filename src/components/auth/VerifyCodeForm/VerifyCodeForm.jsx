@@ -13,16 +13,19 @@ export const VerifyCodeForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { status, error } = useSelector(
-        (state) => state.auth.requestStatus.verifyCode
-    );
+    // const { status, error } = useSelector(
+    //     (state) => state.auth.requestStatus.verifyCode
+    // );
+
+    const [status, setStatus] = useState('idle');
+    const [error, setError] = useState(null);
 
     const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
 
     const handleChange = (value)=> {
 
-        dispatch(clearVerifyCodeError());
+        setError(null);
         setCode(value);
 
     }
@@ -33,6 +36,17 @@ export const VerifyCodeForm = () => {
 
         const email = localStorage.getItem('signupEmail');
 
+        if (!email){
+            if (!email) {
+                navigate("/authentication/signup", {
+                    replace: true,
+                    state: {
+                        message: "We couldn't find your signup information. Please sign up again to receive a new verification code."
+                    }
+                });
+            }
+        }
+
 
         const newErrors = validateVerifyCodeForm(code);
 
@@ -42,12 +56,20 @@ export const VerifyCodeForm = () => {
         }
         setValidationErrors({});
 
-        const res = await dispatch(verifyCodeThunk({ email, code }));
-        console.log("response inside handleSubmit of VerifyCode comp is", res);
+        try {
+            setStatus('pending');
 
-        if (res.meta.requestStatus === 'fulfilled') {
+            const res = await dispatch(verifyCodeThunk({ email, code })).unwrap();
+            console.log("response inside handleSubmit of VerifyCode comp is", res);
+
+            setStatus('fulfilled');
             localStorage.removeItem('signupEmail');
-            navigate('/authentication/login'); // or wherever you want
+            navigate('/authentication/login');
+
+        }catch(error){
+            setStatus('rejected');
+            setError(error.message);
+            
         }
     };
 

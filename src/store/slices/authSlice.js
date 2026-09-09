@@ -33,6 +33,8 @@ const initialState = {
 
         forgotPassword: createRequestState(),
 
+        resetPassword: createRequestState(),
+
     },
 
 };
@@ -73,6 +75,12 @@ const authSlice = createSlice({
         clearForgotPasswordError: (state) => {
             clearRequestError(
                 state.requestStatus.forgotPassword
+            );
+        },
+
+        clearResetPasswordError: (state) => {
+            clearRequestError(
+                state.requestStatus.resetPassword
             );
         },
 
@@ -142,7 +150,7 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.signup,
-                action.payload.message
+                action.payload
             );
 
         })
@@ -172,7 +180,7 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.verifyCode,
-                action.payload.message
+                action.payload
             );
 
         })
@@ -195,9 +203,31 @@ const authSlice = createSlice({
 
             setRequestFailed(
                 state.requestStatus.forgotPassword,
-                action.payload.message
+                action.payload
             )
         })
+
+        // .addCase(resetPasswordThunk.pending, (state)=> {
+
+        //     setRequestPending(
+        //         state.requestStatus.resetPassword,
+
+        //     );
+        // })
+
+        // .addCase(resetPasswordThunk.fulfilled, (state)=> {
+
+        //     setRequestSucceeded(state.requestStatus.resetPassword);
+
+        // })
+
+        // .addCase(resetPasswordThunk.rejected, (state, action)=> {
+
+        //     setRequestFailed(
+        //         state.requestStatus.resetPassword,
+        //         action.payload
+        //     )
+        // })
 
 
         // LOGOUT

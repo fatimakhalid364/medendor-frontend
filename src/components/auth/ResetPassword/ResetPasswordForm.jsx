@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginThunk } from '@/store/thunks/authThunks';
-import { useNavigate, Link } from 'react-router-dom';
+import { resetPasswordThunk } from '@/store/thunks/authThunks';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
 import styles from "./LoginForm.module.css";
-import { validateLoginForm } from '@/utils/formValidators';
+import { validateResetPasswordForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 import { clearLoginError } from "@/store/slices/authSlice";
 
 
-export const LoginForm = () => {
+export const ResetPasswordForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const resetToken = searchParams.get("token");
 
     // const { status, error } = useSelector(
     //     (state) => state.auth.requestStatus.login
@@ -24,16 +27,16 @@ export const LoginForm = () => {
     const loading = status === "pending";
 
     const [form, setForm] = useState({
-        email: '',
         password: '',
+        confirmPassword: '',
     });
 
     const [validationErrors, setValidationErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
-        setError(null);
         const { name, value } = e.target;
+        setError(null);
         setForm((prev) => ({
         ...prev,
         [name]: value,
@@ -42,7 +45,7 @@ export const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = validateLoginForm(form);
+        const newErrors = validateResetPasswordForm(form);
 
         if (Object.keys(newErrors).length > 0) {
             setValidationErrors(newErrors);
@@ -51,16 +54,15 @@ export const LoginForm = () => {
         setValidationErrors({});
         try {
             setStatus('pending');
-            const res = await dispatch(loginThunk(form)).unwrap();
-            console.log("response inside handleSubmit of Login comp is", res);
-            const { role } = res.user;
+            const res = await dispatch(resetPasswordThunk(form)).unwrap();
+            console.log("response inside handleSubmit of reset password comp is", res);
             setStatus('fulfilled');
-            navigate(`/${role}/dashboard`);
+            navigate(`/login`);
+
         }catch(error){
             setStatus('rejected');
             setError(error.message);
         }
-       
     };
 
     return (

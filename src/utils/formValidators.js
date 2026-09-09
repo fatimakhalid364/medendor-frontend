@@ -76,3 +76,23 @@ export const validateForgotPasswordForm = (email)=> {
 
   return errors;
 }
+
+export const validateResetPasswordForm = (form) => {
+  const errors = {};
+
+  validatePasswordRequired(form.password, errors);
+
+  if (!errors.password) {
+    validatePasswordStrength(form.password, errors);
+  }
+
+
+  if (!form.confirmPassword) {
+    errors.confirmPassword = "Please confirm your password";
+  } else if (form.password !== form.confirmPassword) {
+    errors.confirmPassword = "Passwords do not match";
+  }
+
+  return errors
+
+}

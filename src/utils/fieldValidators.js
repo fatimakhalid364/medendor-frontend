@@ -9,7 +9,7 @@ export const validateEmail = (email, errors) => {
 };
 
 export const validatePasswordRequired = (password, errors) => {
-  if (!password?.trim()) {
+  if (!password) {
     errors.password = "Password is required";
   }
 };

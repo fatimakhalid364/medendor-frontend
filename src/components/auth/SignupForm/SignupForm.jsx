@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupThunk } from '@/store/thunks/authThunks';
 import { useNavigate, Link } from 'react-router-dom';
@@ -8,15 +8,22 @@ import {Dropdown} from '@/components/ui/Dropdown';
 import {roles} from '@/constants/roles';
 import styles from "./SignupForm.module.css";
 import { validateSignupForm } from '@/utils/formValidators';
-import { clearSignupError } from "@/store/slices/authSlice";
-import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
+import { useLocation } from "react-router-dom";
+import {MailIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 
 export const SignupForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { status, error } = useSelector(
-        (state) => state.auth.requestStatus.signup
-    );
+    const location = useLocation();
+
+    // const { status, error } = useSelector(
+    //     (state) => state.auth.requestStatus.signup
+    // );
+
+    const [status, setStatus] = useState('idle');
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState(null);
+
 
     const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
@@ -31,15 +38,29 @@ export const SignupForm = () => {
         role: ''
     });
 
+    useEffect(() => {
+        if (location.state?.message){
+            setMessage(location.state?.message)
+        }
+        if (message) {
+
+            navigate(location.pathname, {
+                replace: true,
+                state: null
+            });
+        }
+    }, [message, navigate, location.pathname]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
+        setError(null);
         setForm((prev) => ({
             ...prev,
             [name]: value,
         }));
-        if (e) {
-        dispatch(clearSignupError());
-    }
+    //     if (e) {
+    //     dispatch(clearSignupError());
+    // }
     };
 
 
@@ -52,12 +73,17 @@ export const SignupForm = () => {
             return;
         }
         setValidationErrors({});
-        localStorage.setItem('signupEmail', form.email.trim());
         const { confirmPassword, ...signupData } = form;
-        const res = await dispatch(signupThunk(signupData));
-        console.log("response inside handleSubmit of Signup comp is", res);
-        if (res.meta.requestStatus === 'fulfilled') {
-        navigate('/authentication/verify-code');
+        try {
+            setStatus('pending');
+            const res = await dispatch(signupThunk(signupData)).unwrap();
+            console.log("response inside handleSubmit of Signup comp is", res);
+            setStatus('fulfilled');
+            localStorage.setItem('signupEmail', form.email.trim());
+            navigate('/authentication/verify-code');
+        }catch(error){
+            setStatus('rejected');
+            setError(error.message)
         }
     };
 
@@ -67,6 +93,14 @@ export const SignupForm = () => {
                     <h2>Sign Up</h2>
                     <p className={styles.subtitle}>Sign up to become a part of Meden</p>
                 </div>
+
+                {
+                    message && (
+                        <div className={styles.message} role="alert">
+                            {message}
+                        </div> 
+                    )
+                }
 
                 {error && (
                     <div className={styles.alert} role="alert">

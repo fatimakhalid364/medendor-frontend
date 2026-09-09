@@ -14,9 +14,12 @@ export const ForgotPasswordForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { status, error } = useSelector(
-        (state) => state.auth.requestStatus.forgotPassword
-    );
+    // const { status, error } = useSelector(
+    //     (state) => state.auth.requestStatus.forgotPassword
+    // );
+
+    const [status, setStatus] = useState('idle');
+    const [error, setError] = useState(null);
 
     const loading = status === "pending";
 
@@ -25,10 +28,13 @@ export const ForgotPasswordForm = () => {
     const [validationErrors, setValidationErrors] = useState({});
 
     const handleChange = (e) => {
-        setEmail(e.target.value);
+
         if (e) {
-            dispatch(clearForgotPasswordError());
+            setError(null);
+
+            setEmail(e.target.value);
         }
+        
     };
 
     const handleSubmit = async (e) => {
@@ -39,12 +45,20 @@ export const ForgotPasswordForm = () => {
             setValidationErrors(newErrors);
             return;
         }
+
         setValidationErrors({});
-        const res = await dispatch(forgotPasswordThunk(email));
-        console.log("response inside handleSubmit of forgotpassword comp is", res);
-        if (res.meta.requestStatus === "fulfilled") {
-            navigate('/reset-password');
+
+        try {
+            setStatus('pending');
+            const res = await dispatch(forgotPasswordThunk(email)).unwrap();
+            console.log("response inside handleSubmit of forgotpassword comp is", res);
+            setStatus('fulfilled');
+        }catch(error){
+            setStatus('rejected');
+            setError(error.message);
         }
+      
+        
     };
 
     return (
@@ -62,7 +76,7 @@ export const ForgotPasswordForm = () => {
                     </div>
                 )}
 
-                {status === 'idle' ? 
+                {status === 'fulfilled' ? 
                     <div className={styles.emailMessage}>
                         <p >
                             {`If an account exists for ${email}, 
