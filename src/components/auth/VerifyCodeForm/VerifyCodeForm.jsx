@@ -7,6 +7,7 @@ import styles from "./VerifyCodeForm.module.css";
 import {Button} from '@/components/ui/Button';
 import {OTPInput} from '@/components/ui/OTPInput';
 import {clearVerifyCodeError} from '@/store/slices/authSlice';
+import {toast} from 'sonner';
 
 export const VerifyCodeForm = () => {
     const [code, setCode] = useState('');
@@ -18,14 +19,14 @@ export const VerifyCodeForm = () => {
     // );
 
     const [status, setStatus] = useState('idle');
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
 
     const loading = status === "pending";
     const [validationErrors, setValidationErrors] = useState({});
 
     const handleChange = (value)=> {
 
-        setError(null);
+        // setError(null);
         setCode(value);
 
     }
@@ -64,12 +65,17 @@ export const VerifyCodeForm = () => {
 
             setStatus('fulfilled');
             localStorage.removeItem('signupEmail');
+            toast.success(res.message, {
+                duration: 3000,
+            })
             navigate('/authentication/login');
 
         }catch(error){
             setStatus('rejected');
-            setError(error.message);
-            
+            // setError(error.message);
+            toast.error(error.message, {
+                duration: 3000,
+            });
         }
     };
 
@@ -80,11 +86,11 @@ export const VerifyCodeForm = () => {
                     <p className={styles.subtitle}>We've sent a 6-digit code to your email. Enter the code to verify your email</p>
                 </div>
 
-            {error && (
+            {/* {error && (
                 <div className={styles.alert} role="alert">
                     {error}
                 </div>
-            )}
+            )} */}
             <form className={styles.fields} onSubmit={handleSubmit}>
                 <OTPInput
                     value={code}

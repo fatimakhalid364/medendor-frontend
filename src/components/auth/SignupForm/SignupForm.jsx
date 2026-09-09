@@ -10,6 +10,7 @@ import styles from "./SignupForm.module.css";
 import { validateSignupForm } from '@/utils/formValidators';
 import { useLocation } from "react-router-dom";
 import {MailIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
+import { toast } from "sonner";
 
 export const SignupForm = () => {
     const dispatch = useDispatch();
@@ -22,7 +23,6 @@ export const SignupForm = () => {
 
     const [status, setStatus] = useState('idle');
     const [error, setError] = useState(null);
-    const [message, setMessage] = useState(null);
 
 
     const loading = status === "pending";
@@ -40,7 +40,9 @@ export const SignupForm = () => {
 
     useEffect(() => {
         if (location.state?.message){
-            setMessage(location.state?.message)
+            toast.info(location.state.message, {
+                duration: 3000,
+            });
         }
         if (message) {
 
@@ -49,11 +51,11 @@ export const SignupForm = () => {
                 state: null
             });
         }
-    }, [message, navigate, location.pathname]);
+    }, [navigate, location.pathname]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setError(null);
+        // setError(null);
         setForm((prev) => ({
             ...prev,
             [name]: value,
@@ -83,7 +85,10 @@ export const SignupForm = () => {
             navigate('/authentication/verify-code');
         }catch(error){
             setStatus('rejected');
-            setError(error.message)
+            // setError(error.message)
+            toast.error(error.message, {
+                duration: 3000
+            });
         }
     };
 
@@ -94,19 +99,19 @@ export const SignupForm = () => {
                     <p className={styles.subtitle}>Sign up to become a part of Meden</p>
                 </div>
 
-                {
+                {/* {
                     message && (
                         <div className={styles.message} role="alert">
                             {message}
                         </div> 
                     )
-                }
+                } */}
 
-                {error && (
+                {/* {error && (
                     <div className={styles.alert} role="alert">
                         {error}
                     </div>
-                )}
+                )} */}
 
                 <form className={styles.fields} onSubmit={handleSubmit}>
                     <Input

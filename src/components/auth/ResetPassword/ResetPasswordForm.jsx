@@ -7,6 +7,7 @@ import {Button} from '@/components/ui/Button';
 import styles from "./LoginForm.module.css";
 import { validateResetPasswordForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
+import { toast } from "sonner";
 import { clearLoginError } from "@/store/slices/authSlice";
 
 
@@ -22,7 +23,7 @@ export const ResetPasswordForm = () => {
     // );
 
     const [status, setStatus] = useState('idle');
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
 
     const loading = status === "pending";
 
@@ -36,7 +37,7 @@ export const ResetPasswordForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setError(null);
+        // setError(null);
         setForm((prev) => ({
         ...prev,
         [name]: value,
@@ -54,42 +55,37 @@ export const ResetPasswordForm = () => {
         setValidationErrors({});
         try {
             setStatus('pending');
-            const res = await dispatch(resetPasswordThunk(form)).unwrap();
+            const res = await dispatch(resetPasswordThunk({newPassword: form.password, resetToken})).unwrap();
             console.log("response inside handleSubmit of reset password comp is", res);
             setStatus('fulfilled');
-            navigate(`/login`);
+            toast.success(res.messsage, {
+                duration: 3000,
+            });
+            navigate(`/authentication/login`);
 
         }catch(error){
             setStatus('rejected');
-            setError(error.message);
+            // setError(error.message);
+            toast.error(error.message, {
+                duration: 3000,
+            });
         }
     };
 
     return (
             <>
                 <div className={styles.header}>
-                    <h2>Welcome back</h2>
-                    <p className={styles.subtitle}>Sign in to continue to your Meden account</p>
+                    <h2>Reset Your Password</h2>
+                    <p className={styles.subtitle}>Enter your new password below to secure your account.</p>
                 </div>
 
-                {error && (
+                {/* {error && (
                     <div className={styles.alert} role="alert">
                         {error}
                     </div>
-                )}
+                )} */}
 
                 <form className={styles.fields} onSubmit={handleSubmit} noValidate>
-                    <Input
-                        label="Email"
-                        name="email"
-                        type="email"
-                        placeholder="you@example.com"
-                        value={form.email}
-                        onChange={handleChange}
-                        error={validationErrors.email}
-                        icon={<MailIcon />}
-                        autoComplete="email"
-                    />
 
                     <Input
                         label="Password"
@@ -104,18 +100,23 @@ export const ResetPasswordForm = () => {
                         onRightIconClick={() => setShowPassword((prev) => !prev)}
                         autoComplete="current-password"
                     />
-                    <div className={styles.linkBox}>
-                        <Link className={styles.link} to="/authentication/forgot-password">Forgot Password?</Link>
-                    </div>
+                    <Input
+                        label="Confirm Password"
+                        name="confirmPassword"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                        value={form.confirmPassword}
+                        onChange={handleChange}
+                        error={validationErrors.confirmPassword}
+                        rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        onRightIconClick={() => setShowPassword((prev) => !prev)}
+                        autoComplete="current-password"
+                    />
 
                     <Button type='submit' loading={loading} disabled={loading} className={styles.submit}>
-                        Login
+                        Reset Password
                     </Button>
                 </form>
-
-                <p className={styles.footer}>
-                    Don&apos;t have an account? <Link to="/authentication/signup">Sign up</Link>
-                </p>
             </>
     );
 };

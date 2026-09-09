@@ -8,6 +8,7 @@ import styles from "./LoginForm.module.css";
 import { validateLoginForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 import { clearLoginError } from "@/store/slices/authSlice";
+import { toast } from "sonner";
 
 
 export const LoginForm = () => {
@@ -19,7 +20,7 @@ export const LoginForm = () => {
     // );
 
     const [status, setStatus] = useState('idle');
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
 
     const loading = status === "pending";
 
@@ -32,7 +33,7 @@ export const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
-        setError(null);
+        // setError(null);
         const { name, value } = e.target;
         setForm((prev) => ({
         ...prev,
@@ -58,7 +59,10 @@ export const LoginForm = () => {
             navigate(`/${role}/dashboard`);
         }catch(error){
             setStatus('rejected');
-            setError(error.message);
+            // setError(error.message);
+            toast.error(error.message, {
+                duration: 3000,
+            });
         }
        
     };
@@ -70,11 +74,11 @@ export const LoginForm = () => {
                     <p className={styles.subtitle}>Sign in to continue to your Meden account</p>
                 </div>
 
-                {error && (
+                {/* {error && (
                     <div className={styles.alert} role="alert">
                         {error}
                     </div>
-                )}
+                )} */}
 
                 <form className={styles.fields} onSubmit={handleSubmit} noValidate>
                     <Input

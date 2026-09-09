@@ -8,6 +8,7 @@ import { validateForgotPasswordForm } from '@/utils/formValidators';
 import {MailIcon} from '@/components/icons';
 import { clearForgotPasswordError } from "@/store/slices/authSlice";
 import { forgotPasswordThunk } from '@/store/thunks/authThunks';
+import {toast} from 'sonner';
 
 
 export const ForgotPasswordForm = () => {
@@ -19,7 +20,7 @@ export const ForgotPasswordForm = () => {
     // );
 
     const [status, setStatus] = useState('idle');
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
 
     const loading = status === "pending";
 
@@ -30,7 +31,7 @@ export const ForgotPasswordForm = () => {
     const handleChange = (e) => {
 
         if (e) {
-            setError(null);
+            // setError(null);
 
             setEmail(e.target.value);
         }
@@ -55,7 +56,10 @@ export const ForgotPasswordForm = () => {
             setStatus('fulfilled');
         }catch(error){
             setStatus('rejected');
-            setError(error.message);
+            // setError(error.message);
+            toast.error(error.message, {
+                duration: 3000,
+            });
         }
       
         
@@ -66,15 +70,15 @@ export const ForgotPasswordForm = () => {
                 <div className={styles.header}>
                     <h2>Password Recovery</h2>
                     <p className={styles.subtitle}>{
-                        status === 'succeeded' ? '' : `Enter the email associated to your Meden account`}
+                        status === 'fulfilled' ? '' : `Enter the email associated to your Meden account`}
                     </p>
                 </div>
 
-                {error && (
+                {/* {error && (
                     <div className={styles.alert} role="alert">
                         {error}
                     </div>
-                )}
+                )} */}
 
                 {status === 'fulfilled' ? 
                     <div className={styles.emailMessage}>
