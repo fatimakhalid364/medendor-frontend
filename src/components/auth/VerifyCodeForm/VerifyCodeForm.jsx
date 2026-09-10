@@ -80,7 +80,7 @@ export const VerifyCodeForm = () => {
             setStatus('fulfilled');
             localStorage.removeItem('signupEmail');
             toast.success(res.message, {
-                duration: 3000,
+                duration: 5000,
             })
             navigate('/authentication/login');
 
@@ -88,7 +88,7 @@ export const VerifyCodeForm = () => {
             setStatus('rejected');
             // setError(error.message);
             toast.error(error.message, {
-                duration: 3000,
+                duration: 5000,
             });
         }
     };
@@ -116,7 +116,7 @@ export const VerifyCodeForm = () => {
 
             setResendCodeStatus('fulfilled');
             toast.success(res.message, {
-                duration: 3000,
+                duration: 5000,
             })
 
             setResendCooldown(60);
@@ -125,7 +125,7 @@ export const VerifyCodeForm = () => {
             setResendCodeStatus('rejected');
             // setError(error.message);
             toast.error(error.message, {
-                duration: 3000,
+                duration: 5000,
             });
         }
     };

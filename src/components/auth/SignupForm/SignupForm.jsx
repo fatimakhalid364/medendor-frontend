@@ -41,17 +41,14 @@ export const SignupForm = () => {
     useEffect(() => {
         if (location.state?.message){
             toast.info(location.state.message, {
-                duration: 3000,
+                duration: 5000,
             });
-        }
-        if (message) {
-
             navigate(location.pathname, {
                 replace: true,
                 state: null
             });
         }
-    }, [navigate, location.pathname]);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -87,7 +84,7 @@ export const SignupForm = () => {
             setStatus('rejected');
             // setError(error.message)
             toast.error(error.message, {
-                duration: 3000
+                duration: 5000
             });
         }
     };

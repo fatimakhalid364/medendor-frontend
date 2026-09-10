@@ -4,7 +4,7 @@ import { resetPasswordThunk } from '@/store/thunks/authThunks';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
-import styles from "./LoginForm.module.css";
+import styles from "./ResetPasswordForm.module.css";
 import { validateResetPasswordForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 import { toast } from "sonner";
@@ -58,7 +58,7 @@ export const ResetPasswordForm = () => {
             console.log("response inside handleSubmit of reset password comp is", res);
             setStatus('fulfilled');
             toast.success(res.messsage, {
-                duration: 3000,
+                duration: 5000,
             });
             navigate(`/authentication/login`);
 
@@ -66,7 +66,7 @@ export const ResetPasswordForm = () => {
             setStatus('rejected');
             // setError(error.message);
             toast.error(error.message, {
-                duration: 3000,
+                duration: 5000,
             });
         }
     };

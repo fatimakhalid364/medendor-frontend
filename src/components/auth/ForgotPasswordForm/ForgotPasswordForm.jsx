@@ -57,7 +57,7 @@ export const ForgotPasswordForm = () => {
             setStatus('rejected');
             // setError(error.message);
             toast.error(error.message, {
-                duration: 3000,
+                duration: 5000,
             });
         }
       
