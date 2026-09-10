@@ -6,7 +6,6 @@ import {Button} from '@/components/ui/Button';
 import styles from "./ForgotPasswordForm.module.css";
 import { validateForgotPasswordForm } from '@/utils/formValidators';
 import {MailIcon} from '@/components/icons';
-import { clearForgotPasswordError } from "@/store/slices/authSlice";
 import { forgotPasswordThunk } from '@/store/thunks/authThunks';
 import {toast} from 'sonner';
 

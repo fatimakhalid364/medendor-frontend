@@ -8,7 +8,6 @@ import styles from "./LoginForm.module.css";
 import { validateResetPasswordForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
 import { toast } from "sonner";
-import { clearLoginError } from "@/store/slices/authSlice";
 
 
 export const ResetPasswordForm = () => {

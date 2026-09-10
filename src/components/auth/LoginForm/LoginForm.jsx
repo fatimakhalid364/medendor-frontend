@@ -7,7 +7,6 @@ import {Button} from '@/components/ui/Button';
 import styles from "./LoginForm.module.css";
 import { validateLoginForm } from '@/utils/formValidators';
 import {MailIcon, LockIcon, EyeIcon, EyeOffIcon} from '@/components/icons';
-import { clearLoginError } from "@/store/slices/authSlice";
 import { toast } from "sonner";
 
 

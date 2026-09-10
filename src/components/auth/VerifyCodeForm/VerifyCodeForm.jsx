@@ -6,7 +6,6 @@ import {validateVerifyCodeForm} from '@/utils/formValidators';
 import styles from "./VerifyCodeForm.module.css";
 import {Button} from '@/components/ui/Button';
 import {OTPInput} from '@/components/ui/OTPInput';
-import {clearVerifyCodeError} from '@/store/slices/authSlice';
 import {toast} from 'sonner';
 
 export const VerifyCodeForm = () => {

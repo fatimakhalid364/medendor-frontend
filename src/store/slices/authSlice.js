@@ -23,20 +23,6 @@ const initialState = {
 
     isAuthenticated: false,
 
-    requestStatus: {
-
-        login: createRequestState(),
-
-        signup: createRequestState(),
-
-        verifyCode: createRequestState(),
-
-        forgotPassword: createRequestState(),
-
-        resetPassword: createRequestState(),
-
-    },
-
 };
 
 
@@ -51,39 +37,6 @@ const authSlice = createSlice({
 
         resetAuthState: () => initialState,
 
-
-        clearLoginError: (state) => {
-            clearRequestError(
-                state.requestStatus.login
-            );
-        },
-
-
-        clearSignupError: (state) => {
-            clearRequestError(
-                state.requestStatus.signup
-            );
-        },
-
-
-        clearVerifyCodeError: (state) => {
-            clearRequestError(
-                state.requestStatus.verifyCode
-            );
-        },
-
-        clearForgotPasswordError: (state) => {
-            clearRequestError(
-                state.requestStatus.forgotPassword
-            );
-        },
-
-        clearResetPasswordError: (state) => {
-            clearRequestError(
-                state.requestStatus.resetPassword
-            );
-        },
-
     },
 
 
@@ -93,14 +46,6 @@ const authSlice = createSlice({
 
         // LOGIN
 
-        .addCase(loginThunk.pending, (state) => {
-
-            setRequestPending(
-                state.requestStatus.login
-            );
-
-        })
-
 
         .addCase(loginThunk.fulfilled, (state, action) => {
 
@@ -108,127 +53,7 @@ const authSlice = createSlice({
 
             state.isAuthenticated = true;
 
-
-            setRequestSucceeded(
-                state.requestStatus.login
-            );
-
         })
-
-
-        .addCase(loginThunk.rejected, (state, action) => {
-
-            setRequestFailed(
-                state.requestStatus.login,
-                action.payload.message
-            );
-
-        })
-
-
-        // SIGNUP
-
-        .addCase(signupThunk.pending, (state) => {
-
-            setRequestPending(
-                state.requestStatus.signup
-            );
-
-        })
-
-
-        .addCase(signupThunk.fulfilled, (state) => {
-
-            setRequestSucceeded(
-                state.requestStatus.signup
-            );
-
-        })
-
-
-        .addCase(signupThunk.rejected, (state, action) => {
-
-            setRequestFailed(
-                state.requestStatus.signup,
-                action.payload
-            );
-
-        })
-
-
-        // VERIFY CODE
-
-        .addCase(verifyCodeThunk.pending, (state) => {
-
-            setRequestPending(
-                state.requestStatus.verifyCode
-            );
-
-        })
-
-
-        .addCase(verifyCodeThunk.fulfilled, (state) => {
-
-            setRequestSucceeded(
-                state.requestStatus.verifyCode
-            );
-
-        })
-
-
-        .addCase(verifyCodeThunk.rejected, (state, action) => {
-
-            setRequestFailed(
-                state.requestStatus.verifyCode,
-                action.payload
-            );
-
-        })
-
-        .addCase(forgotPasswordThunk.pending, (state)=> {
-
-            setRequestPending(
-                state.requestStatus.forgotPassword,
-
-            );
-        })
-
-        .addCase(forgotPasswordThunk.fulfilled, (state)=> {
-
-            setRequestSucceeded(state.requestStatus.forgotPassword);
-
-        })
-
-        .addCase(forgotPasswordThunk.rejected, (state, action)=> {
-
-            setRequestFailed(
-                state.requestStatus.forgotPassword,
-                action.payload
-            )
-        })
-
-        // .addCase(resetPasswordThunk.pending, (state)=> {
-
-        //     setRequestPending(
-        //         state.requestStatus.resetPassword,
-
-        //     );
-        // })
-
-        // .addCase(resetPasswordThunk.fulfilled, (state)=> {
-
-        //     setRequestSucceeded(state.requestStatus.resetPassword);
-
-        // })
-
-        // .addCase(resetPasswordThunk.rejected, (state, action)=> {
-
-        //     setRequestFailed(
-        //         state.requestStatus.resetPassword,
-        //         action.payload
-        //     )
-        // })
-
 
         // LOGOUT
 
@@ -241,10 +66,6 @@ const authSlice = createSlice({
 
 export const {
     resetAuthState,
-    clearLoginError,
-    clearSignupError,
-    clearVerifyCodeError,
-    clearForgotPasswordError
 } = authSlice.actions;
 
 
