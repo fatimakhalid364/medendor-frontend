@@ -51,7 +51,7 @@ export const ForgotPasswordForm = () => {
 
         try {
             setStatus('pending');
-            const res = await dispatch(forgotPasswordThunk(email)).unwrap();
+            const res = await dispatch(forgotPasswordThunk({email})).unwrap();
             console.log("response inside handleSubmit of forgotpassword comp is", res);
             setStatus('fulfilled');
         }catch(error){

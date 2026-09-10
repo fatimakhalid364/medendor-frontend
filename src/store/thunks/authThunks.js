@@ -14,7 +14,20 @@ export const signupThunk = createAsyncThunk('auth/signup', async (data, thunkAPI
     }
 });
 
-export const verifyCodeThunk = createAsyncThunk('auth/verify-code', async (data, thunkAPI) => {
+export const resendVerificationCodeThunk = createAsyncThunk('auth/resendVerificationCode', async (data, thunkAPI) => {
+    try {
+        console.log("inside resendVerificationCodeThunk");
+
+        const res = await api.post('/auth/resend-verification-code', data);
+
+        console.log("data in resendVerificationCodeThunk is", res.data);
+        return res.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || 'Resend verification code failed');
+    }
+});
+
+export const verifyCodeThunk = createAsyncThunk('auth/verifyCode', async (data, thunkAPI) => {
     try {
         console.log("inside verifyCodeThunk")
         const res = await api.post('/auth/verify-code', data);
@@ -48,7 +61,7 @@ export const forgotPasswordThunk = createAsyncThunk('auth/forgotPassword', async
 });
 
 
-export const resetPasswordThunk = createAsyncThunk('auth/forgotPassword', async (data, thunkAPI) => {
+export const resetPasswordThunk = createAsyncThunk('auth/resetPassword', async (data, thunkAPI) => {
     try {
         console.log("inside resetPasswordthunk")
         const res = await api.post('/auth/reset-password', data);

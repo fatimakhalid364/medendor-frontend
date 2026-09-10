@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { verifyCodeThunk } from '@/store/thunks/authThunks';
+import { verifyCodeThunk, resendVerificationCodeThunk } from '@/store/thunks/authThunks';
 import { useNavigate, Link } from 'react-router-dom';
 import {validateVerifyCodeForm} from '@/utils/formValidators';
 import styles from "./VerifyCodeForm.module.css";
@@ -19,10 +19,25 @@ export const VerifyCodeForm = () => {
     // );
 
     const [status, setStatus] = useState('idle');
+    const [resendCodeStatus, setResendCodeStatus] = useState('idle');
+    const [resendCooldown, setResendCooldown] = useState(60);
     // const [error, setError] = useState(null);
 
     const loading = status === "pending";
+    const resendCodeLoading = resendCodeStatus === "pending"
     const [validationErrors, setValidationErrors] = useState({});
+
+    useEffect(() => {
+        if (resendCooldown <= 0) return;
+
+        const timer = setInterval(() => {
+            setResendCooldown((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [resendCooldown]);
+
+
 
     const handleChange = (value)=> {
 
@@ -38,14 +53,14 @@ export const VerifyCodeForm = () => {
         const email = localStorage.getItem('signupEmail');
 
         if (!email){
-            if (!email) {
-                navigate("/authentication/signup", {
-                    replace: true,
-                    state: {
-                        message: "We couldn't find your signup information. Please sign up again to receive a new verification code."
-                    }
-                });
-            }
+            navigate("/authentication/signup", {
+                replace: true,
+                state: {
+                    message: "We couldn't find your signup information. Please sign up again to receive a new verification code."
+                }
+            });
+
+            return;
         }
 
 
@@ -79,6 +94,43 @@ export const VerifyCodeForm = () => {
         }
     };
 
+    const handleResendCode = async (e) => {
+
+        const email = localStorage.getItem('signupEmail');
+
+        if (!email){
+            navigate("/authentication/signup", {
+                replace: true,
+                state: {
+                    message: "We couldn't find your signup information. Please sign up again to receive a new verification code."
+                }
+            });
+
+            return;
+        }
+
+        try {
+            setResendCodeStatus('pending');
+
+            const res = await dispatch(resendVerificationCodeThunk({email})).unwrap();
+            console.log("response inside handleResendCode of VerifyCode comp is", res);
+
+            setResendCodeStatus('fulfilled');
+            toast.success(res.message, {
+                duration: 3000,
+            })
+
+            setResendCooldown(60);
+
+        }catch(error){
+            setResendCodeStatus('rejected');
+            // setError(error.message);
+            toast.error(error.message, {
+                duration: 3000,
+            });
+        }
+    };
+
     return (
         <>
             <div className={styles.header}>
@@ -101,7 +153,17 @@ export const VerifyCodeForm = () => {
 
             </form>
             <p className={styles.footer}>
-                Didn't receive email? <Link to="/placeholder">Resend Verification Code</Link>
+                <Button 
+                    type='submit' 
+                    variant='secondary' 
+                    loading={resendCodeLoading} 
+                    disabled={resendCooldown > 0}
+                    onClick={handleResendCode}
+                >
+                    {resendCooldown > 0
+                        ? `Resend Code (${resendCooldown}s)`
+                        : "Resend Code"}
+                </Button>
             </p>
         </>
     );
