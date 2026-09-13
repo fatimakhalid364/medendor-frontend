@@ -82,8 +82,9 @@ export const SignupForm = () => {
             navigate('/authentication/verify-code');
         }catch(error){
             setStatus('rejected');
+            console.log('error inside signup handlesubmit is', error)
             // setError(error.message)
-            toast.error(error.message, {
+            toast.error(error, {
                 duration: 5000
             });
         }

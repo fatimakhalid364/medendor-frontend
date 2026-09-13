@@ -10,6 +10,7 @@ export const signupThunk = createAsyncThunk('auth/signup', async (data, thunkAPI
         console.log("data in signupthunk is", res.data);
         return res.data;
     } catch (err) {
+        console.log('error inside signup thunk is', err)
         return thunkAPI.rejectWithValue(err.response?.data?.message || 'Signup failed');
     }
 });

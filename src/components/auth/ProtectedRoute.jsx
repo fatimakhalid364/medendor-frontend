@@ -9,7 +9,7 @@ export const ProtectedRoute = () => {
     const allowedPrefix = roleRoutePrefixes[userRole];
 
     if (!isAuthenticated) {
-        return <Navigate to="/authentication/signin" replace state={{ from: location }} />;
+        return <Navigate to="/authentication/login" replace state={{ from: location }} />;
     }
 
     if (!allowedPrefix || !location.pathname.startsWith(allowedPrefix)) {

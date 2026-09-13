@@ -13,7 +13,12 @@ export default defineConfig({
   //   host: true,
   //   origin: 'https://a5edd1d013d7.ngrok-free.app',
   // },
+  server: {
+    allowedHosts: [
+      'upper-simpson-temporary-representative.trycloudflare.com'
+    ],
+  },
   preview: {
-    allowedHosts: ['https://a5edd1d013d7.ngrok-free.app']
+    allowedHosts: ['upper-simpson-temporary-representative.trycloudflare.com']
   }
 })

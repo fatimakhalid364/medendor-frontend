@@ -59,7 +59,7 @@ export const LoginForm = () => {
         }catch(error){
             setStatus('rejected');
             // setError(error.message);
-            toast.error(error.message, {
+            toast.error(error, {
                 duration: 5000,
             });
         }
