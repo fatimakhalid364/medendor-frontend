@@ -57,7 +57,7 @@ export const ResetPasswordForm = () => {
             const res = await dispatch(resetPasswordThunk({newPassword: form.password, resetToken})).unwrap();
             console.log("response inside handleSubmit of reset password comp is", res);
             setStatus('fulfilled');
-            toast.success(res.messsage, {
+            toast.success(res.message, {
                 duration: 5000,
             });
             navigate(`/authentication/login`);
