@@ -157,7 +157,7 @@
 .title {
   margin: 0;
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   line-height: 1.4;
 
@@ -171,7 +171,7 @@
 
   max-width: 320px;
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   line-height: 1.5;
 

@@ -1,1 +1,1 @@
-export {VerticalStepper} from './VerticalSteper.jsx';
+export {VerticalStepper} from './VerticalStepper';

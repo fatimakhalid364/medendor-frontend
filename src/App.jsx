@@ -6,6 +6,7 @@ import {SignupPage} from '@/pages/auth/SignupPage';
 import { VerifyCodePage } from '@/pages/auth/VerifyCodePage';
 import {ForgotPasswordPage} from '@/pages/auth/ForgotPasswordPage';
 import {ResetPasswordPage} from '@/pages/auth/ResetPasswordPage';
+import {DoctorOnboardingPage} from '@/pages/onboarding/DoctorOnboardingPage';
 import {Dashboard} from '@/components/dashboard/placeholder';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/authentication/verify-code" element={<VerifyCodePage />} />
           <Route path="/authentication/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/authentication/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/test-path" element = {<DoctorOnboardingPage/>}/>
         </Route>
 
         {/* Protected Routes */}
