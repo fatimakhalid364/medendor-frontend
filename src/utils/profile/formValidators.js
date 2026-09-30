@@ -1,5 +1,6 @@
 import {genders} from '@/constants/enum';
 
+
 export const validateBasicProfileForm = (form) => {
   const errors = {};
 

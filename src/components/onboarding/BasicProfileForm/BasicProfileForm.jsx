@@ -10,7 +10,7 @@ import { getCitiesThunk } from '@/store/thunks/locationThunks';
 import { useDispatch } from 'react-redux';
 import {validateBasicProfileForm} from '@/utils/profile/formValidators';
 import {basicProfileThunk} from '@/store/thunks/profileThunks';
-
+import { validateProfilePicture } from '@/utils/profile/fieldValidators';
 
 
 export const BasicProfileForm = () => {
@@ -21,7 +21,7 @@ export const BasicProfileForm = () => {
 
     const [form, setForm] = useState({
         gender: '',
-        dateOfBirth: null,
+        dateOfBirth: '',
         country: '',
         city: '',
     });
@@ -68,38 +68,25 @@ export const BasicProfileForm = () => {
     }, [previewUrl]);
 
     const handleProfilePictureChange = (e) => {
-        const file = e.target.files?.[0];
 
-        if (!file) {
-            return;
-        }
+        const fileErrors = validateProfilePicture(file);
 
-        if (!allowedMimeTypes.includes(file.type)) {
-            toast.error(
-                'Please select a JPEG, PNG, or WebP image.',
-                {
-                    duration: 5000
-                }
-            );
+        if (Object.keys(fileErrors).length > 0){
+
+            const {maxSize, mimeType} = fileErrors;
+
+            toast.error(maxSize || mimeType, {
+                duration: 5000,
+            });
 
             e.target.value = '';
+
             return;
         }
 
-        const maxSize = 5 * 1024 * 1024;
+        const file = e.target.files?.[0]; 
 
-        if (file.size > maxSize) {
-            toast.error(
-                'Profile picture must be 5 MB or smaller.',
-                {
-                    duration: 5000
-                }
-            );
-
-            e.target.value = '';
-            return;
-        }
-
+        
         // Store the actual File object
         setProfilePicture(file);
 
@@ -121,10 +108,10 @@ export const BasicProfileForm = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        const newErrors = validateBasicProfileForm(form);
+        const formErrors = validateBasicProfileForm(form);
 
-        if (Object.keys(newErrors).length > 0){
-            setValidationErrors(newErrors);
+        if (Object.keys(formErrors).length > 0){
+            setValidationErrors(formErrors);
             return
         }
 
