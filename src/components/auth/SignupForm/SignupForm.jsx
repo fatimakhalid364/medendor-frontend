@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import {Input} from '@/components/ui/Input';
 import {Button} from '@/components/ui/Button';
 import {Dropdown} from '@/components/ui/Dropdown';
-import {roles} from '@/constants/roles';
+import {roles} from '@/constants/enum';
 import styles from "./SignupForm.module.css";
 import { validateSignupForm } from '@/utils/formValidators';
 import { useLocation } from "react-router-dom";

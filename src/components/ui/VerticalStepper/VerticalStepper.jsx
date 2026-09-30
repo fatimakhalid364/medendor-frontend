@@ -16,6 +16,7 @@ export const VerticalStepper = ({
         const isCompleted = index < activeStep;
         const isActive = index === activeStep;
         const isUpcoming = index > activeStep;
+        const StepIcon = step.icon;
 
         const stepState = isCompleted
           ? "completed"
@@ -55,11 +56,11 @@ export const VerticalStepper = ({
               aria-current={isActive ? "step" : undefined}
               aria-label={step.title}
             >
-              {step.icon ? (
-                step.icon
-              ) : isCompleted ? (
-                <DefaultIcon>✓</DefaultIcon>
-              ) : (
+              {isCompleted ? (
+                 <DefaultIcon>✓</DefaultIcon>
+              ) : StepIcon ? (
+                <StepIcon size={21} />
+              )  : (
                 <DefaultIcon>{index + 1}</DefaultIcon>
               )}
             </button>

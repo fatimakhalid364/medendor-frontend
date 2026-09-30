@@ -184,7 +184,7 @@
 --------------------------------- */
 
 .upcoming .title {
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
 
 .active .title {
