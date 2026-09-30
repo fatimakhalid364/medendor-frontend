@@ -25,3 +25,9 @@ export const genders = [
     label: "Other"
   }
 ];
+
+export const allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp'
+];
