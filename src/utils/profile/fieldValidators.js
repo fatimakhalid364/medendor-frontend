@@ -4,10 +4,6 @@ export const validateProfilePicture = (file) => {
 
     const errors = {};
 
-    if (!file){
-        return;
-    }
-
     if (!allowedMimeTypes.includes(file.type)) {
         errors.mimeType = 'Please select a JPEG, PNG or WEBP image'
     }

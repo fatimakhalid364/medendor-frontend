@@ -1,232 +1,127 @@
-import {Input} from '@/components/ui/Input';
-import {Button} from '@/components/ui/Button';
-import styles from "./BasicProfileForm.module.css";
-import {Dropdown} from '@/components/ui/Dropdown';
-import {useState, useEffect} from 'react';
-import { toast } from "sonner";
-import {genders, allowedMimeTypes} from '@/constants/enum';
-import {COUNTRIES} from '@/data/countries';
-import { getCitiesThunk } from '@/store/thunks/locationThunks';
-import { useDispatch } from 'react-redux';
-import {validateBasicProfileForm} from '@/utils/profile/formValidators';
-import {basicProfileThunk} from '@/store/thunks/profileThunks';
-import { validateProfilePicture } from '@/utils/profile/fieldValidators';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import styles from './BasicProfileForm.module.css';
+import { Dropdown } from '@/components/ui/Dropdown';
+import defaultAvatar from '@/assets/images/default-avatar.png';
+import {ProfilePictureModal} from '@/components/onboarding/ProfilePictureModal'
 
+import { genders } from '@/constants/enum';
+import { COUNTRIES } from '@/data/countries';
+
+import {useState} from 'react';
+import { useCities } from '@/hooks/onboarding/basicProfile/useCities';
+import { useProfilePicture } from '@/hooks/onboarding/basicProfile/useProfilePicture';
+import { useBasicProfileForm } from '@/hooks/onboarding/basicProfile/useBasicProfileForm';
 
 export const BasicProfileForm = () => {
 
-    const [status, setStatus] = useState('idle');
-    const loading = status === "pending";
-    const dispatch = useDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [form, setForm] = useState({
-        gender: '',
-        dateOfBirth: '',
-        country: '',
-        city: '',
-    });
+    const handleModalOpenClick = () => setIsModalOpen(true);
 
-    const [validationErrors, setValidationErrors] = useState({});
-    const [cities, setCities] = useState([]);
+    const handleModalCloseClick = () => setIsModalOpen(false);
 
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
+     const {
+        profilePicture,
+        previewUrl,
+        handleProfilePictureChange,
+        handleProfilePictureDelete
+    } = useProfilePicture();
 
-    useEffect(() => {
-        setForm((prev)=> ({
-            ...prev,
-            city: ''
-        }))
-        const fetchCities = async () => {
-            if (!form.country) {
-                return;
-            }
+    const {
+        form,
+        validationErrors,
+        loading,
+        handleChange,
+        handleSubmit,
+    } = useBasicProfileForm(profilePicture);
 
-            try {
-                const result = await dispatch(
-                    getCitiesThunk(form.country)
-                ).unwrap();
+    const cities = useCities(form.country);
 
-                setCities(result.cities);
-            } catch (error) {
-                toast.error(error, {
-                    duration: 5000,
-                });
-                setCities([]);
-            }
-        };
-
-        fetchCities();
-    }, [form.country, dispatch]);
-
-    useEffect(() => { 
-        return () => { 
-            if (previewUrl) { 
-                URL.revokeObjectURL(previewUrl); 
-            } 
-        }; 
-    }, [previewUrl]);
-
-    const handleProfilePictureChange = (e) => {
-
-        const fileErrors = validateProfilePicture(file);
-
-        if (Object.keys(fileErrors).length > 0){
-
-            const {maxSize, mimeType} = fileErrors;
-
-            toast.error(maxSize || mimeType, {
-                duration: 5000,
-            });
-
-            e.target.value = '';
-
-            return;
-        }
-
-        const file = e.target.files?.[0]; 
-
-        
-        // Store the actual File object
-        setProfilePicture(file);
-
-        // Create temporary preview
-        const objectUrl = URL.createObjectURL(file);
-        setPreviewUrl(objectUrl);
-    };
-
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-
-        setForm((prev) => ({
-            ...prev,
-            [name]: value
-        }))
-    }
-
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-
-        const formErrors = validateBasicProfileForm(form);
-
-        if (Object.keys(formErrors).length > 0){
-            setValidationErrors(formErrors);
-            return
-        }
-
-        setValidationErrors({});
-
-        try {
-            setStatus('pending');
-
-            const formData = new FormData();
-
-            formData.append('gender', form.gender);
-            formData.append('dateOfBirth', form.dateOfBirth);
-            formData.append('country', form.country);
-            formData.append('city', form.city);
-
-            if (profilePicture){
-                 formData.append('profilePicture', profilePicture);
-            }
-
-            const result = await dispatch(basicProfileThunk({role: 'doctor', data: formData})).unwrap();
-            console.log('results inside handleSubmit of basicProfileForm is', result);
-            setStatus('fulfilled')
-        }catch(error){
-            setStatus('rejected');
-            toast.error(error, {
-                duration: 5000,
-            });
-        }
-    }
     return (
         <>
+            <ProfilePictureModal 
+                isModalOpen={isModalOpen}
+                handleModalCloseClick={handleModalCloseClick}
+                profilePicture={profilePicture}
+                previewUrl={previewUrl}
+                handleProfilePictureChange={handleProfilePictureChange}
+                handleProfilePictureDelete={handleProfilePictureDelete}
+            />
             <div className={styles.header}>
                 <h3>Step 1 of 5</h3>
                 <h2>Create your basic profile</h2>
             </div>
-                <form className={styles.fields} onSubmit={handleSubmit} noValidate>
-                    <div className={styles.imgAndFields}>
-                        <div className={styles.profilePicture}>
-                            <img
-                                src={previewUrl || "/default-avatar.png"}
-                                alt="Profile preview"
-                            />
-                            <Input
-                                label={profilePicture ? "Change photo" : "Add photo"}
-                                name="profilePicture"
-                                type = "file"
-                                accept="image/jpeg,image/png,image/webp"
-                                onChange={handleProfilePictureChange}
-                                className={styles.fileInput}
-                            />
 
-                            {/* <label
-                                htmlFor="profilePicture"
-                                className={styles.changePhoto}
-                            >
-                                {profilePicture ? "Change photo" : "Add photo"}
-                            </label>
-
-                            <input
-                                id="profilePicture"
-                                name="profilePicture"
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp"
-                                onChange={handleProfilePictureChange}
-                                className={styles.fileInput}
-                            /> */}
-                        </div>
+            <form
+                className={styles.fields}
+                onSubmit={handleSubmit}
+                noValidate
+            >
+                <div className={styles.imgAndFields}>
+                    <div className={styles.profilePicture}>
+                        <img
+                            src={previewUrl || defaultAvatar}
+                            alt="Profile preview"
+                            onClick={handleModalOpenClick}
+                        />
                     </div>
-                    <Dropdown
-                        label="Gender"
-                        name="gender"
-                        value={form.gender}
-                        options={genders}
-                        placeholder="Select your gender"
-                        onChange={handleChange}
-                        error={validationErrors.gender}
-                    />
+                    <div className={styles.genderAndBirth}>
+                        <Dropdown
+                            label="Gender"
+                            name="gender"
+                            value={form.gender}
+                            options={genders}
+                            placeholder="Select your gender"
+                            onChange={handleChange}
+                            error={validationErrors.gender}
+                        />
 
-                    <Input
-                        label="Date of birth"
-                        name="dateOfBirth"
-                        type = "date"
-                        placeholder="Select your date of birth"
-                        value={form.dateOfBirth}
-                        onChange={handleChange}
-                        error={validationErrors.dateOfBirth}
-                        max={new Date().toISOString().split("T")[0]}
-                    />
+                        <Input
+                            label="Date of birth"
+                            name="dateOfBirth"
+                            type="date"
+                            placeholder="Select your date of birth"
+                            value={form.dateOfBirth}
+                            onChange={handleChange}
+                            error={validationErrors.dateOfBirth}
+                            max={new Date()
+                                .toISOString()
+                                .split('T')[0]}
+                        />
+                    </div>
+                </div>
 
-                    <Dropdown
-                        label="Country"
-                        name="country"
-                        value={form.country}
-                        options={COUNTRIES}
-                        placeholder="Select your country"
-                        onChange={handleChange}
-                        error={validationErrors.country}
-                    />
+                <Dropdown
+                    label="Country"
+                    name="country"
+                    value={form.country}
+                    options={COUNTRIES}
+                    placeholder="Select your country"
+                    onChange={handleChange}
+                    error={validationErrors.country}
+                />
 
-                    <Dropdown
-                        label="City"
-                        name="city"
-                        value={form.city}
-                        options={cities}
-                        placeholder="Select your city"
-                        onChange={handleChange}
-                        error={validationErrors.city}
-                        disabled={!form.country}
-                    />
+                <Dropdown
+                    label="City"
+                    name="city"
+                    value={form.city}
+                    options={cities}
+                    placeholder="Select your city"
+                    onChange={handleChange}
+                    error={validationErrors.city}
+                    disabled={!form.country}
+                />
 
-                    <Button type='submit' loading={loading} disabled={loading} className={styles.submit}>
-                        Save and Continue
-                    </Button>
-                </form>
-            
+                <Button
+                    type="submit"
+                    loading={loading}
+                    disabled={loading}
+                    className={styles.submit}
+                >
+                    Save and Continue
+                </Button>
+            </form>
         </>
-    )
-}
+    );
+};

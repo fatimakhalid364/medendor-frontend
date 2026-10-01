@@ -11,12 +11,14 @@ export const Input = ({
   icon,
   rightIcon,
   onRightIconClick,
+  labelClassName,
+  inputClassName,
   ...props
 }) => {
   return (
     <div className={styles.wrapper}>
       {label && (
-        <label htmlFor={name} className={styles.label}>
+        <label htmlFor={name}  className={`${styles.label} ${labelClassName || ""}`}>
           {label}
         </label>
       )}
@@ -31,7 +33,7 @@ export const Input = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`${styles.input} ${icon ? styles.hasIcon : ""} ${rightIcon ? styles.hasRightIcon : ""} ${error ? styles.error : ""}`}
+          className={`${styles.input} ${icon ? styles.hasIcon : ""} ${rightIcon ? styles.hasRightIcon : ""} ${error ? styles.error : ""} ${inputClassName || ''}`}
           {...props}
         />
 
